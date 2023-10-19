@@ -14,6 +14,12 @@ for (let i = 0; i < holes.length; i++) {
       
       if (score >= 10) {
         alert("Поздравляю! Вы победили!");
+        
+        dead.textContent = 0;
+        lost.textContent = 0;
+
+        score = 0;
+        losses = 0;
       }
     } else {
       losses += 1;
@@ -21,6 +27,12 @@ for (let i = 0; i < holes.length; i++) {
 
       if (losses >= 5) {
         alert("Игра окончена. Вы проиграли!");
+        
+        dead.textContent = 0;
+        lost.textContent = 0;
+
+        score = 0;
+        losses = 0;
       }
     }
   }
