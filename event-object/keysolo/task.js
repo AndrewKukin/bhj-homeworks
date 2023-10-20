@@ -4,6 +4,8 @@ class Game {
     this.wordElement = container.querySelector('.word');
     this.winsElement = container.querySelector('.status__wins');
     this.lossElement = container.querySelector('.status__loss');
+    this.timerElement = timerElement;
+    this.timer = 0;
 
     this.reset();
 
@@ -14,7 +16,36 @@ class Game {
     this.setNewWord();
     this.winsElement.textContent = 0;
     this.lossElement.textContent = 0;
+    this.resetTimer();
   }
+
+  resetTimer() {
+    if (this.timerInterval) {
+        clearInterval(this.timerInterval);
+    }
+    this.timer = 0;
+    this.timerElement.textContent = this.timer;
+}
+
+startTimer(seconds) {
+    this.timer = seconds;
+    this.timerElement.textContent = this.timer;
+    this.timerInterval = setInterval(() => {
+        if (this.timer > 0) {
+            this.timer--;
+            this.timerElement.textContent = this.timer;
+        } else {
+            clearInterval(this.timerInterval);
+            this.fail();
+        }
+    }, 1000);
+}
+
+stopTimer() {
+    if (this.timerInterval) {
+        clearInterval(this.timerInterval);
+    }
+}
 
   registerEvents() {
     document.addEventListener('keydown', (event) => {
@@ -44,6 +75,7 @@ class Game {
   }
 
   fail() {
+    this.stopTimer();
     if (++this.lossElement.textContent === 5) {
       alert('Вы проиграли!');
       this.reset();
@@ -52,9 +84,12 @@ class Game {
   }
 
   setNewWord() {
+    this.resetTimer();
     const word = this.getWord();
+    const timeLimit = word.length;
 
     this.renderWord(word);
+    this.startTimer(timeLimit);
   }
 
   getWord() {
@@ -89,5 +124,6 @@ class Game {
   }
 }
 
-new Game(document.getElementById('game'))
+const timerElement = document.getElementById('timer');
+new Game(document.getElementById('game'), timerElement)
 
